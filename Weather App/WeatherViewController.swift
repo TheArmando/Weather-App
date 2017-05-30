@@ -36,6 +36,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBAction func refreshButtonPressed(_ sender: UIBarButtonItem) {
         locationManager.requestLocation()
+
     }
     
     override func viewDidLoad() {
@@ -81,6 +82,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func handleError(message: String) {
+        print(message)
         let alert = UIAlertController(title: "Error Loading Forecast", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
@@ -92,5 +94,11 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         self.weatherDescription.text = data.description
         //self.weatherIcon.text = data.icon
         self.weatherIcon.text = emojiIcons[data.icon] ?? "❓"
+        
+        CLGeocoder().reverseGeocodeLocation(location) { placemarks, error in
+            let locationName = placemarks?.first?.locality ?? "   "
+            self.weatherLocation.text = locationName
+        
+        }
     }
 }
